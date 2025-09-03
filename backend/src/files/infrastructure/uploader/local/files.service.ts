@@ -8,6 +8,8 @@ import { ConfigService } from '@nestjs/config';
 import { FileRepository } from '../../persistence/file.repository';
 import { AllConfigType } from '../../../../config/config.type';
 import { FileType } from '../../../domain/file';
+import * as path from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class FilesLocalService {
@@ -26,12 +28,30 @@ export class FilesLocalService {
       });
     }
 
-    return {
-      file: await this.fileRepository.create({
-        path: `/${this.configService.get('app.apiPrefix', {
-          infer: true,
-        })}/v1/${file.path}`,
-      }),
-    };
+    if (file.path) {
+      return {
+        file: await this.fileRepository.create({
+          path: `/${this.configService.get('app.apiPrefix', {
+            infer: true,
+          })}/v1/${file.path}`,
+        }),
+      };
+    } else {
+      const uploadsDir = path.resolve(process.cwd(), 'files');
+      await fs.promises.mkdir(uploadsDir, { recursive: true });
+
+      const fileName = `${Date.now()}-${file.originalname}`;
+      const finalPath = path.join(uploadsDir, fileName);
+
+      await fs.promises.writeFile(finalPath, file.buffer);
+
+      return {
+        file: await this.fileRepository.create({
+          path: `/${this.configService.get('app.apiPrefix', {
+            infer: true,
+          })}/v1/${path.join('files', fileName)}`,
+        }),
+      };
+    }
   }
 }

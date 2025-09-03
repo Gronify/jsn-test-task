@@ -2,31 +2,48 @@ import {
   Controller,
   Get,
   Post,
-  Body,
   Patch,
   Param,
   Delete,
   Query,
+  Body,
+  UploadedFiles,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { SuperheroesService } from './superhero.service';
 import { CreateSuperheroDto } from './dto/create-superhero.dto';
 import { UpdateSuperheroDto } from './dto/update-superhero.dto';
-
 import { Superhero } from './domain/superhero';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { infinityPagination } from '../utils/infinity-pagination';
 import { FindAllSuperheroesDto } from './dto/find-all-superheros.dto';
-import { InfinityPaginationResponseDto } from 'src/utils/dto/infinity-pagination-response.dto';
+import { InfinityPaginationResponseDto } from '../utils/dto/infinity-pagination-response.dto';
+import { FilesLocalService } from 'src/files/infrastructure/uploader/local/files.service';
 
-@Controller({
-  path: 'superheroes',
-  version: '1',
-})
+@Controller({ path: 'superheroes', version: '1' })
 export class SuperheroesController {
-  constructor(private readonly superheroesService: SuperheroesService) {}
+  constructor(
+    private readonly superheroesService: SuperheroesService,
+    private readonly filesService: FilesLocalService,
+  ) {}
 
   @Post()
-  create(@Body() createSuperheroDto: CreateSuperheroDto) {
-    return this.superheroesService.create(createSuperheroDto);
+  @UseInterceptors(FilesInterceptor('images'))
+  async create(@Body() createSuperheroDto, @UploadedFiles() images) {
+    const uploadedImages = images
+      ? await Promise.all(images.map((file) => this.filesService.create(file)))
+      : [];
+    const files = uploadedImages.map((res) => ({
+      id: res.file.id,
+      path: res.file.path.replace(/\\/g, '/'),
+    }));
+    console.log(createSuperheroDto);
+
+    return this.superheroesService.create({
+      ...createSuperheroDto,
+      images: files,
+    });
   }
 
   @Get()
@@ -35,16 +52,11 @@ export class SuperheroesController {
   ): Promise<InfinityPaginationResponseDto<Superhero>> {
     const page = query?.page ?? 1;
     let limit = query?.limit ?? 10;
-    if (limit > 50) {
-      limit = 50;
-    }
+    if (limit > 50) limit = 50;
 
     return infinityPagination(
       await this.superheroesService.findAllWithPagination({
-        paginationOptions: {
-          page,
-          limit,
-        },
+        paginationOptions: { page, limit },
       }),
       { page, limit },
     );
@@ -55,13 +67,27 @@ export class SuperheroesController {
     return this.superheroesService.findById(id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: number,
-    @Body() updateSuperheroDto: UpdateSuperheroDto,
-  ) {
-    return this.superheroesService.update(id, updateSuperheroDto);
-  }
+  // @Patch(':id')
+  // @UseInterceptors(FilesInterceptor('images'))
+  // async update(
+  //   @Param('id') id: number,
+  //   @Body() updateSuperheroDto: UpdateSuperheroDto,
+  //   @UploadedFiles() images?: Express.Multer.File[],
+  // ) {
+  //   const uploadedImages = images
+  //     ? await Promise.all(
+  //         images.map((file) =>
+  //           this.filesService.create(file).then((res) => res.file.id),
+  //         ),
+  //       )
+  //     : [];
+
+  //   return this.superheroesService.update(id, {
+  //     ...updateSuperheroDto,
+  //     images:
+  //       uploadedImages.length > 0 ? uploadedImages : updateSuperheroDto.images,
+  //   });
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: number) {

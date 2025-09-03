@@ -6,30 +6,14 @@ import {
   ArrayNotEmpty,
 } from 'class-validator';
 
+//maybe later
 export class CreateSuperheroDto {
-  @IsString()
-  @IsNotEmpty()
-  nickname: string;
-
-  @IsString()
-  @IsNotEmpty()
-  real_name: string;
-
-  @IsString()
-  @IsNotEmpty()
-  origin_description: string;
-
-  @IsArray()
-  @ArrayNotEmpty()
-  @IsString({ each: true })
-  superpowers: string[];
-
-  @IsString()
-  @IsNotEmpty()
-  catch_phrase: string;
-
+  @IsString() nickname: string;
+  @IsString() real_name: string;
+  @IsString() origin_description: string;
+  superpowers: string[] | string;
+  @IsString() catch_phrase: string;
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  images?: string[];
+  images?: any[];
 }
