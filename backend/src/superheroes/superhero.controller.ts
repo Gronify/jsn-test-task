@@ -38,7 +38,6 @@ export class SuperheroesController {
       id: res.file.id,
       path: res.file.path.replace(/\\/g, '/'),
     }));
-    console.log(createSuperheroDto);
 
     return this.superheroesService.create({
       ...createSuperheroDto,
@@ -67,27 +66,28 @@ export class SuperheroesController {
     return this.superheroesService.findById(id);
   }
 
-  // @Patch(':id')
-  // @UseInterceptors(FilesInterceptor('images'))
-  // async update(
-  //   @Param('id') id: number,
-  //   @Body() updateSuperheroDto: UpdateSuperheroDto,
-  //   @UploadedFiles() images?: Express.Multer.File[],
-  // ) {
-  //   const uploadedImages = images
-  //     ? await Promise.all(
-  //         images.map((file) =>
-  //           this.filesService.create(file).then((res) => res.file.id),
-  //         ),
-  //       )
-  //     : [];
+  @Patch(':id')
+  @UseInterceptors(FilesInterceptor('images'))
+  async update(
+    @Param('id') id: number,
+    @Body() updateDto: any, //later
+    @UploadedFiles() images?: Express.Multer.File[],
+  ) {
+    const uploadedImages = images
+      ? await Promise.all(images.map((file) => this.filesService.create(file)))
+      : [];
 
-  //   return this.superheroesService.update(id, {
-  //     ...updateSuperheroDto,
-  //     images:
-  //       uploadedImages.length > 0 ? uploadedImages : updateSuperheroDto.images,
-  //   });
-  // }
+    const files = uploadedImages.map((res) => ({
+      id: res.file.id,
+      path: res.file.path.replace(/\\/g, '/'),
+    }));
+
+    return this.superheroesService.update(id, {
+      ...updateDto,
+      images: files,
+      removeImages: updateDto.removeImages ?? [],
+    });
+  }
 
   @Delete(':id')
   remove(@Param('id') id: number) {
