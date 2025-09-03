@@ -1,5 +1,6 @@
 import { Superhero } from "@/entities/superhero/model/superhero.types";
 import { Button } from "@/shared/components/ui/button";
+import Image from "next/image";
 import React from "react";
 
 interface Props {
@@ -34,7 +35,7 @@ export const SuperheroCatalog = ({
         >
           <div className="flex items-center space-x-4">
             {hero.images?.[0] && (
-              <img
+              <Image
                 src={"http://localhost:3001" + hero.images[0].path}
                 alt={hero.nickname}
                 className="w-24 h-24 object-contain border rounded"
@@ -43,16 +44,27 @@ export const SuperheroCatalog = ({
             <h3 className="font-semibold">{hero.nickname}</h3>
           </div>
           <div className="space-x-2">
-            <Button onClick={() => onView(hero)} variant="default" size="sm">
+            <Button
+              onClick={() => onView(hero)}
+              variant="default"
+              size="sm"
+              className="cursor-pointer"
+            >
               View
             </Button>
-            <Button onClick={() => onEdit(hero)} variant="secondary" size="sm">
+            <Button
+              onClick={() => onEdit(hero)}
+              variant="secondary"
+              size="sm"
+              className="cursor-pointer"
+            >
               Edit
             </Button>
             <Button
               onClick={() => onDelete(hero.id)}
               variant="destructive"
               size="sm"
+              className="cursor-pointer"
             >
               Delete
             </Button>

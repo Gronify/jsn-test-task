@@ -66,7 +66,10 @@ export default function Home() {
         page={page}
         hasNextPage={hasNextPage}
         onView={handleView}
-        onEdit={formHook.startEdit}
+        onEdit={(hero) => {
+          formHook.startEdit(hero);
+          setEditModalOpen(true);
+        }}
         onDelete={handleDelete}
         onPageChange={loadCatalog}
       />

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Superhero } from "@/entities/superhero/model/superhero.types";
+import * as api from "@/shared/api/superhero";
 
 interface FormState {
   nickname: string;
@@ -85,18 +86,16 @@ export const useSuperheroForm = (
       removedImages.forEach((id) => formData.append("removeImages", id));
 
     try {
-      const url = editingId
-        ? `http://localhost:3001/api/v1/superheroes/${editingId}`
-        : `http://localhost:3001/api/v1/superheroes`;
-      const method = editingId ? "PATCH" : "POST";
-      const res = await fetch(url, { method, body: formData });
-      if (!res.ok) throw new Error("Failed to save superhero");
-      await res.json();
+      if (editingId) {
+        await api.updateSuperhero(editingId, formData);
+      } else {
+        await api.createSuperhero(formData);
+      }
       setForm(emptyForm);
       setEditingId(null);
       setExistingImages([]);
       setRemovedImages([]);
-      loadCatalog(1);
+      await loadCatalog(1);
     } catch (err) {
       console.error(err);
       alert("Error saving superhero");

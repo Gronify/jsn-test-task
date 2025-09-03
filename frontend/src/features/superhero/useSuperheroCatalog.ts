@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Superhero } from "@/entities/superhero/model/superhero.types";
+import * as api from "@/shared/api/superhero";
 
 export const useSuperheroCatalog = () => {
   const [catalog, setCatalog] = useState<Superhero[]>([]);
@@ -10,13 +11,9 @@ export const useSuperheroCatalog = () => {
   const loadCatalog = async (pageToLoad = page) => {
     setLoadingCatalog(true);
     try {
-      const res = await fetch(
-        `http://localhost:3001/api/v1/superheroes?page=${pageToLoad}&limit=5`
-      );
-      if (!res.ok) throw new Error("Failed to fetch catalog");
-      const json = await res.json();
-      setCatalog(json.data);
-      setHasNextPage(json.data.length === 5);
+      const { data, hasNextPage } = await api.fetchSuperheroes(pageToLoad);
+      setCatalog(data);
+      setHasNextPage(hasNextPage);
       setPage(pageToLoad);
     } catch (err) {
       console.error(err);
@@ -28,11 +25,7 @@ export const useSuperheroCatalog = () => {
   const handleDelete = async (id: number) => {
     if (!confirm("Delete this superhero?")) return;
     try {
-      const res = await fetch(
-        `http://localhost:3001/api/v1/superheroes/${id}`,
-        { method: "DELETE" }
-      );
-      if (!res.ok) throw new Error("Failed to delete superhero");
+      await api.deleteSuperhero(id);
       loadCatalog(1);
     } catch (err) {
       console.error(err);
