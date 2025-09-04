@@ -1,6 +1,8 @@
 # Superhero Test
 
-This repository contains a fullstack **Superhero** application. The backend is built with **NestJS**, the frontend with **Next.js**, and **PostgreSQL** is used as the database. Docker is used for the database and Adminer.
+This repository contains a fullstack **Superhero** application. The backend is built with **NestJS** and **PostgreSQL** is used as the database. Docker is used for the database and Adminer.  
+
+This project uses **Feature-Sliced Design (FSD)** - an architectural methodology for scaffolding front-end applications.
 
 
 ---
@@ -104,3 +106,21 @@ http://localhost:3001/api/v1/superheroes
 - [x] Remove images when editing a superhero
 - [x] List all superheroes with pagination (5 items per page). Show only one image per superhero in the list
 - [x] View details of a particular superhero with all information and images
+
+---
+
+## Screenshots
+
+1. **Superhero catalog**  
+![Catalog](https://github.com/Gronify/jsn-test-task/blob/master/assets/Screenshot_1.jpg?raw=true)
+
+2. **Create superhero form**  
+![Create](https://github.com/Gronify/jsn-test-task/blob/master/assets/Screenshot_2.jpg?raw=true)
+
+3. **Update superhero form**  
+![Update](https://github.com/Gronify/jsn-test-task/blob/master/assets/Screenshot_3.jpg?raw=true)
+
+4. **Update superhero with added image**  
+![Update with image](https://github.com/Gronify/jsn-test-task/blob/master/assets/Screenshot_4.jpg?raw=true)
+
+---
