@@ -1,6 +1,5 @@
 import { Superhero } from "@/entities/superhero/model/superhero.types";
 import { Button } from "@/shared/components/ui/button";
-import Image from "next/image";
 import React from "react";
 
 interface Props {
@@ -35,10 +34,10 @@ export const SuperheroCatalog = ({
         >
           <div className="flex items-center space-x-4">
             {hero.images?.[0] && (
-              <Image
+              <img
                 src={"http://localhost:3001" + hero.images[0].path}
                 alt={hero.nickname}
-                className="w-24 h-24 object-contain border rounded"
+                className="w-24 h-24 object-cover border rounded"
               />
             )}
             <h3 className="font-semibold">{hero.nickname}</h3>

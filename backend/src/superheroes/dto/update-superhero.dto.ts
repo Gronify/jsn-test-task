@@ -1,4 +1,9 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateSuperheroDto } from './create-superhero.dto';
-
-export class UpdateSuperheroDto extends PartialType(CreateSuperheroDto) {}
+export class UpdateSuperheroDto {
+  nickname?: string;
+  real_name?: string;
+  origin_description?: string;
+  superpowers?: string[] | string;
+  catch_phrase?: string;
+  images?: { id: string; path: string }[];
+  removeImages?: string[];
+}

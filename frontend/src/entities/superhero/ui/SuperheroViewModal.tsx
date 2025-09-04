@@ -69,7 +69,7 @@ export const SuperheroViewForm = ({ hero }: Props) => {
                 <img
                   src={"http://localhost:3001" + img.path}
                   alt={hero.nickname}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
                 />
               </div>
             ))}

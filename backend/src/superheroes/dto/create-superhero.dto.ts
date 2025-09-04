@@ -1,12 +1,5 @@
-import {
-  IsString,
-  IsNotEmpty,
-  IsOptional,
-  IsArray,
-  ArrayNotEmpty,
-} from 'class-validator';
+import { IsString, IsOptional, IsArray } from 'class-validator';
 
-//maybe later
 export class CreateSuperheroDto {
   @IsString() nickname: string;
   @IsString() real_name: string;

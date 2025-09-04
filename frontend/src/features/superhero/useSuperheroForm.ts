@@ -70,6 +70,13 @@ export const useSuperheroForm = (
     setRemovedImages([]);
   };
 
+  const resetForm = () => {
+    setForm(emptyForm);
+    setEditingId(null);
+    setExistingImages([]);
+    setRemovedImages([]);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.nickname.trim()) return alert("Nickname is required");
@@ -91,24 +98,13 @@ export const useSuperheroForm = (
       } else {
         await api.createSuperhero(formData);
       }
-      setForm(emptyForm);
-      setEditingId(null);
-      setExistingImages([]);
-      setRemovedImages([]);
+      resetForm();
       await loadCatalog(1);
     } catch (err) {
       console.error(err);
-      alert("Error saving superhero");
     } finally {
       setLoading(false);
     }
-  };
-
-  const resetForm = () => {
-    setForm(emptyForm);
-    setEditingId(null);
-    setExistingImages([]);
-    setRemovedImages([]);
   };
 
   return {

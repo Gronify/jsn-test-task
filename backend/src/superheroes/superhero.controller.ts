@@ -46,9 +46,19 @@ export class SuperheroesController {
   }
 
   @Get()
-  async findAll(
-    @Query() query: FindAllSuperheroesDto,
-  ): Promise<InfinityPaginationResponseDto<Superhero>> {
+  async findAll(@Query() query: FindAllSuperheroesDto): Promise<
+    InfinityPaginationResponseDto<{
+      images: { id: string; path: string }[];
+      id: number;
+      nickname: string;
+      real_name: string;
+      origin_description: string;
+      superpowers: string[];
+      catch_phrase: string;
+      createdAt: Date;
+      updatedAt: Date;
+    }>
+  > {
     const page = query?.page ?? 1;
     let limit = query?.limit ?? 10;
     if (limit > 50) limit = 50;

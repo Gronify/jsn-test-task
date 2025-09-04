@@ -44,8 +44,19 @@ export class SuperheroesService {
     paginationOptions,
   }: {
     paginationOptions: IPaginationOptions;
-  }): Promise<any[]> {
-    //later
+  }): Promise<
+    {
+      images: { id: string; path: string }[];
+      id: number;
+      nickname: string;
+      real_name: string;
+      origin_description: string;
+      superpowers: string[];
+      catch_phrase: string;
+      createdAt: Date;
+      updatedAt: Date;
+    }[]
+  > {
     const entities = await this.superheroRepository.findAllWithPagination({
       paginationOptions: {
         page: paginationOptions.page,
@@ -53,7 +64,7 @@ export class SuperheroesService {
       },
     });
 
-    const allFileIds = entities.flatMap((e) => e.images);
+    const allFileIds: string[] = entities.flatMap((e) => e.images);
     const files = await this.filesService.findByIds(allFileIds);
 
     return entities.map((entity) => {
@@ -85,17 +96,8 @@ export class SuperheroesService {
 
   async update(
     id: Superhero['id'],
-    updateSuperheroDto: {
-      nickname?: string;
-      real_name?: string;
-      origin_description?: string;
-      superpowers?: string[] | string;
-      catch_phrase?: string;
-      images?: { id: string; path: string }[];
-      removeImages?: string[];
-    },
+    updateSuperheroDto: UpdateSuperheroDto,
   ): Promise<any> {
-    //later
     const existingHero = await this.superheroRepository.findById(id);
     if (!existingHero) {
       throw new NotFoundException(`Superhero with ID ${id} not found`);

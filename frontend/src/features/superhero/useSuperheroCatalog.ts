@@ -29,7 +29,6 @@ export const useSuperheroCatalog = () => {
       loadCatalog(1);
     } catch (err) {
       console.error(err);
-      alert("Error deleting superhero");
     }
   };
 
