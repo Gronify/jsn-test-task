@@ -45,12 +45,12 @@ cp example.env .env
 npm install
 ```
 
-3. Run database migrations:
+4. Run database migrations:
 ```bash
 npm run migration:run
 ```
 
-4. Start backend in development mode:
+5. Start backend in development mode:
 ```bash
 npm run start:dev
 ```
@@ -76,6 +76,20 @@ npm run dev
 
 Frontend will run on: http://localhost:3000
 
+
+### Running Backend Tests
+
+The backend comes with unit tests written using **Jest**. To run them, follow these steps:
+
+1. Go to the backend folder:
+```bash
+cd backend
+```
+
+2. Run all unit tests:
+```bash
+npm run test
+```
 
 ### API
 
@@ -106,6 +120,7 @@ http://localhost:3001/api/v1/superheroes
 - [x] Remove images when editing a superhero
 - [x] List all superheroes with pagination (5 items per page). Show only one image per superhero in the list
 - [x] View details of a particular superhero with all information and images
+- [x] Have unit test of superheroes service backend
 
 ---
 
