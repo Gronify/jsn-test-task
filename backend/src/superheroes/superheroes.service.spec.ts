@@ -7,7 +7,6 @@ import { SuperheroesService } from './superhero.service';
 describe('SuperheroesService', () => {
   let service: SuperheroesService;
   let repo: jest.Mocked<SuperheroRepository>;
-  // let files: jest.Mocked<FilesService>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -35,7 +34,6 @@ describe('SuperheroesService', () => {
 
     service = module.get(SuperheroesService);
     repo = module.get(SuperheroRepository);
-    // files = module.get(FilesService);
   });
 
   it('should create superhero with normalized superpowers', async () => {

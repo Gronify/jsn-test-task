@@ -79,6 +79,8 @@ Frontend will run on: http://localhost:3000
 
 ### Running Backend Tests
 
+⚠️ Note: Tests are written only for parts of the code that showed unexpected behavior during development. They are not meant to provide full coverage.
+
 The backend comes with unit tests written using **Jest**. To run them, follow these steps:
 
 1. Go to the backend folder:
